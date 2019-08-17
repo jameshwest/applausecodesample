@@ -1,6 +1,7 @@
 package demo.datastore;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -180,11 +181,13 @@ public class TestDataStoreFile implements TesterDataStore
       return countries2Testers.containsKey(cnty);
    }
    
-   List<String> loadDataFile(final String pathInJar)
+   List<String> loadDataFile(final String fileName)
    {
       List<String> data = null;
       try
       {
+         final String pathInJar = "data/" + fileName;
+         // Try to find our resources file
          File resource = new ClassPathResource(pathInJar).getFile();
          //data = new String(Files.readAllBytes(resource.toPath()));
          data = Files.readAllLines(resource.toPath());
@@ -192,7 +195,23 @@ public class TestDataStoreFile implements TesterDataStore
       }
       catch (Exception e)
       {
-         logger.warn("Unable to load data file: {}", pathInJar, e);
+         // Unable to find in the ClassPathResources.  Maybe we can find in file system?
+         File resAlt = new File("target/classes/data/" + fileName);
+         if (resAlt.canRead() == true)
+         {
+            try
+            {
+               data = Files.readAllLines(resAlt.toPath());
+            } 
+            catch (IOException e1)
+            {
+               logger.warn("Unable to load data file: {}", fileName, e);
+            }
+         }
+         else
+         {
+            logger.warn("Unable to locate data file: {}", fileName, e);
+         }
       }
       return data;
    }
