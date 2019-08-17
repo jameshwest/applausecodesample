@@ -16,6 +16,7 @@ Sample code for coding challenge
             http://localhost:8080/match?country=US,JP
             http://localhost:8080/match?country=US,JP&device=1
             http://localhost:8080/match?device=1
+            http://localhost:8080/match?device=1,2,3
             http://localhost:8080/match?device=1,Nexus 4
                       - Yes, devices can be input by ID or by description
 
@@ -33,3 +34,8 @@ Code Structure
       application.properties :  Set these to control behavior
       data                   :  The directory where the data is stored and read
       
+Building
+   - To build this you need Maven (version 3.3.9 or latter) and Java 8 or latter
+   - To build:  mvn install
+   - To run  (from this directory):    java -jar target/applause-0.0.1-SNAPSHOT.jar
+     (I don't have the locating the data files down to a science, so data loading depends on the current working directory)
